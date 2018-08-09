@@ -18,7 +18,7 @@ var getUnitInfo = function(url) {
 };
 
 class TACStat {
-    constructor(baseType, bodyEl, selector) {
+    constructor(baseType, bodyEl, selector, fromExtension) {
         this.body = bodyEl || $('body');
         this.baseType = [60,65,75,85];
         this.unitName = this.body.find('.heading h1').text();
@@ -26,7 +26,7 @@ class TACStat {
             baseType = this.baseType[0];
             //this.refreshStat(baseType);
         } else {
-            this.refreshStat(baseType);
+            this.refreshStat(baseType, fromExtension);
         }
     }
     ajax(url, baseType) {
@@ -41,7 +41,7 @@ class TACStat {
     statInfo() {
         return ['hp','patk','pdef','matk','mdef','dex','agi','crit','luck','jewels'];
     }
-    logStats() {
+    logStats(fromExtension) {
         var that = this;
         var unitName = that.unitName;
         var rank = that.body.find('.unit-panel > div.card-body > table > tbody > tr:nth-child(2) > td').text();
@@ -54,6 +54,9 @@ class TACStat {
             this.j3Stat,
         ];
         if (that.body.find('#j4-tab').length) data.push(this.j4Stat);
+        if (fromExtension) {
+            fromExtension = data;
+        }
         console.table(data, ['info', ...this.statInfo()]);
     }
     loadPage(page, fn) {
@@ -66,7 +69,7 @@ class TACStat {
             }, 1000);            
         });
     }
-    refreshStat(baseType = 60) {
+    refreshStat(baseType = 60, fromExtension) {
         console.log(`Reading ${this.unitName} stats (${baseType})...`);
         if (this.baseType.indexOf(baseType) < 0) {
             console.error('Invalid baseType');
@@ -107,7 +110,7 @@ class TACStat {
             }
         })
         .then(function() {
-            that.logStats();
+            that.logStats(fromExtension);
         });
     }
     getBaseStat(selector, baseType) {
@@ -196,7 +199,7 @@ $.ajax(settings).done(function (data) {
     data = data.replace('<body', '<body><div id="body"').replace('</body>', '</div></body>');
     var dom = $(data).filter('#body');
     var type = unitLevel || 60;
-    var tacStat = new TACStat(type, dom);            
+    var tacStat = new TACStat();            
 
 
     // Get stats for all
@@ -211,10 +214,11 @@ $.ajax(settings).done(function (data) {
         }
     }
     units.each(function(i, el) {
-        console.log(el.href);
-        console.log($(el).attr("href"));
-        return;
-        tacStat.ajax(el.href, level);
+        var ahref = $(el).attr("href");
+        var http = unitsUrl.split('/').splice(0,1);
+        var basePath = unitsUrl.split('/').splice(2,1);
+        link = http + '//' + basePath + ahref;
+        tacStat.ajax(link, level);
     });
 
 });
