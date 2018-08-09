@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<link rel="stylesheet" type="text/css" href="/vendor/bootstrap/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="/vendor/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script src="/vendor/datatables.net/js/jquery.dataTables.min.js"></script>
+	<script src="/vendor/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
 	<script src="tac-stat-ob.js"></script>
 	<script src="popup.js"></script>
 	<style type="text/css">
@@ -11,6 +15,18 @@
 	</style>
 </head>
 <body>
-
+	<div class="container-fluid mt-3 mb-3">
+		<div class="row" id="base-selector">
+			<div class="col-12 mb-3">
+				<select class="custom-select" id="base-id">
+				  <option value="60" selected>Base Level: 60</option>
+				  <option value="65">Base Level: 65</option>
+				  <option value="75">Base Level: 75</option>
+				  <option value="80">Base Level: 80</option>
+				</select>
+			</div>
+		</div>
+		<div class="row" id="unit-info-list"></div>
+	</div>
 </body>
 </html>
