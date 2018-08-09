@@ -1,4 +1,23 @@
-var tacCompareSummary = (unitLevel) => {var TACStat = class {
+var tacCompareSummary = (unitLevel, unitsUrl) => {
+
+var getUnitInfo = function(url) {
+    return new Promise(function(resolve) {
+        var settings = {
+          "async": true,
+          "crossDomain": true,
+          "url": url,
+          "method": "GET",
+          "headers": {}
+        }
+
+        $.ajax(settings).done(function (response) {
+          resolve(response);
+        });
+        
+    });
+};
+
+class TACStat {
     constructor(baseType, bodyEl, selector) {
         this.body = bodyEl || $('body');
         this.baseType = [60,65,75,85];
@@ -11,18 +30,12 @@ var tacCompareSummary = (unitLevel) => {var TACStat = class {
         }
     }
     ajax(url, baseType) {
-        $.ajax({
-            url: url,
-            beforeSend(xhr) {
-                console.log('Fetching url:', this.url);
-            },
-            dataType: 'html',
-            success (data) {
-                data = data.replace('<body', '<body><div id="body"').replace('</body>', '</div></body>');
-                var dom = $(data).filter('#body');
-                var type = baseType || 60;
-                var tacStat = new TACStat(type, dom);
-            }
+        console.log('Fetching url:', url);
+        getUnitInfo(url).then(function(data) {
+            data = data.replace('<body', '<body><div id="body"').replace('</body>', '</div></body>');
+            var dom = $(data).filter('#body');
+            var type = baseType || 60;
+            var tacStat = new TACStat(type, dom);            
         });
     }
     statInfo() {
@@ -165,10 +178,56 @@ var tacCompareSummary = (unitLevel) => {var TACStat = class {
 
 var level = unitLevel;
 
+
+
+
+if (unitsUrl) {
+
+
+var settings = {
+  "async": true,
+  "crossDomain": true,
+  "url": unitsUrl,
+  "method": "GET",
+  "headers": {}
+}
+
+$.ajax(settings).done(function (data) {
+    data = data.replace('<body', '<body><div id="body"').replace('</body>', '</div></body>');
+    var dom = $(data).filter('#body');
+    var type = unitLevel || 60;
+    var tacStat = new TACStat(type, dom);            
+
+
+    // Get stats for all
+    var units = dom.find('a.listing-link');
+    console.log('Unit links found:', units.length);
+    if (!units.length) {
+        if (dom.find('#j1-tab').length) {
+            // tacStat.refreshStat(level);
+        }
+        else {
+            console.log('No units found.', `Please check if you're on the correct page.`);
+        }
+    }
+    units.each(function(i, el) {
+        console.log(el.href);
+        console.log($(el).attr("href"));
+        return;
+        tacStat.ajax(el.href, level);
+    });
+
+});
+
+    
+} else {
+
+
+
 // Load all in page
 var tacStat = new TACStat();
 
-// Checkbase
+// Check base
 if (!level) {
     console.log('Please set base level.', tacStat.baseType);
     return;
@@ -179,15 +238,22 @@ else if (!tacStat.baseType.includes(level)) {
     return;
 }
 
-// Get stats for all
-var units = $('a.listing-link');
-console.log('Unit links found:', units.length);
-if (!units.length) {
-    if ($('#j1-tab').length) 
-        tacStat.refreshStat(level);
-    else
-        console.log('No units found.', `Please check if you're on the correct page.`);
+
+
+    // Get stats for all
+    var units = $('a.listing-link');
+    console.log('Unit links found:', units.length);
+    if (!units.length) {
+        if ($('#j1-tab').length) 
+            tacStat.refreshStat(level);
+        else
+            console.log('No units found.', `Please check if you're on the correct page.`);
+    }
+    units.each(function(i, el) {
+    	tacStat.ajax(el.href, level);
+    });
+
 }
-units.each(function(i, el) {
-	tacStat.ajax(el.href, level);
-}); }
+
+
+}

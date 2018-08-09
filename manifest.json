@@ -4,7 +4,8 @@
   "description": "Compare's tac unit",
   "permissions": [
     "bookmarks",
-    "activeTab"
+    "activeTab",
+    "<all_urls>"
   ],
   "browser_action": {
       "default_title": "TAC-STAT-COMPARE",
