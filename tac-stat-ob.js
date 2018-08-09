@@ -1,4 +1,4 @@
-var tacCompareSummary = (unitLevel, unitsUrl) => {
+var tacCompareSummary = (unitLevel, unitsUrl, fromExtension) => {
 
 var getUnitInfo = function(url) {
     return new Promise(function(resolve) {
@@ -29,13 +29,13 @@ class TACStat {
             this.refreshStat(baseType, fromExtension);
         }
     }
-    ajax(url, baseType) {
+    ajax(url, baseType, fromExtension) {
         console.log('Fetching url:', url);
         getUnitInfo(url).then(function(data) {
             data = data.replace('<body', '<body><div id="body"').replace('</body>', '</div></body>');
             var dom = $(data).filter('#body');
             var type = baseType || 60;
-            var tacStat = new TACStat(type, dom);            
+            var tacStat = new TACStat(type, dom, null, fromExtension);            
         });
     }
     statInfo() {
@@ -54,8 +54,8 @@ class TACStat {
             this.j3Stat,
         ];
         if (that.body.find('#j4-tab').length) data.push(this.j4Stat);
-        if (fromExtension) {
-            fromExtension = data;
+        if (fromExtension && typeof fromExtension == 'function') {
+            fromExtension({unitName, rank, elem, data});
         }
         console.table(data, ['info', ...this.statInfo()]);
     }
@@ -218,7 +218,7 @@ $.ajax(settings).done(function (data) {
         var http = unitsUrl.split('/').splice(0,1);
         var basePath = unitsUrl.split('/').splice(2,1);
         link = http + '//' + basePath + ahref;
-        tacStat.ajax(link, level);
+        tacStat.ajax(link, level, fromExtension);
     });
 
 });
