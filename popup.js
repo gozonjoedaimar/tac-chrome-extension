@@ -11,7 +11,7 @@
         var initClasses = 'rounded bg-dark col p-3 ml-3 mr-3 mb-0 text-white';
         initEl.classList.add(...initClasses.split(' '));
         mainBody.appendChild(initEl);
-        currentTab.query({'active': true}, function (tabs) {
+        currentTab.query({'currentWindow': true,'active': true}, function (tabs) {
             var url = tabs[0].url;
 
             if (!url.includes('alchemistcodedb.com/units')) {
