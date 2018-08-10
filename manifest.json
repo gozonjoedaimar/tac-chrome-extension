@@ -1,14 +1,14 @@
 {
-  "name": "TAC-STAT-COMPARE",
-  "version": "1.1",
-  "description": "Compare's tac unit",
+  "name": "TAC Quick Stat View (BULK)",
+  "version": "0.0.1",
+  "description": "Quick Stat view for units in alchemistcodedb unit list.",
   "permissions": [
     "bookmarks",
     "activeTab",
     "<all_urls>"
   ],
   "browser_action": {
-      "default_title": "TAC-STAT-COMPARE",
+      "default_title": "TAC Quick Stat View (BULK)",
       "default_icon": "icon.png",
       "default_popup": "popup.html"
   },
