@@ -1,18 +1,20 @@
 // TAC-STAT-COMPARE
 
 (function($) {
-    document.addEventListener('DOMContentLoaded', function() {
+    var currentTab = chrome.tabs;
+    var initStat = function(base) {
         var mainBody = document.getElementById('unit-info-list');
+        mainBody.innerHTML = "";
         var initText = document.createTextNode('Fetching data...');
         var initEl = document.createElement('small');
         initEl.appendChild(initText);
         var initClasses = 'rounded bg-dark col p-3 ml-3 mr-3 mb-0 text-white';
         initEl.classList.add(...initClasses.split(' '));
         mainBody.appendChild(initEl);
-        chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
+        currentTab.query({'active': true}, function (tabs) {
             var url = tabs[0].url;
 
-            tacCompareSummary(60, url, function(ajaxdata) {
+            tacCompareSummary(base, url, function(ajaxdata) {
                 var pre = document.createElement('pre');
                 pre.appendChild(document.createTextNode(JSON.stringify(ajaxdata, null, 2)));
                 pre.classList.add('col-12');
@@ -22,7 +24,7 @@
                 var unitTableCont = document.createElement('div');
                 var unitTableContClasses = "col-12 mb-2";
                 unitTableCont.classList.add(...unitTableContClasses.split(' '));
-                var tableHead = $(`<h5>${ajaxdata.unitName} <br/>(${ajaxdata.rank}) (${ajaxdata.elem})</h5>`);
+                var tableHead = $(`<h5>${ajaxdata.unitName} (${base}) <br/>(${ajaxdata.rank}) (${ajaxdata.elem})</h5>`);
 
                 if (ajaxdata.icon) {
                     var unitIcon = document.createElement('img');
@@ -97,5 +99,12 @@
             })
 
         });
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+        let baseSelector = document.getElementById('base-id');
+        initStat(parseInt(baseSelector.value));
+        baseSelector.addEventListener('change', function() {
+            initStat(parseInt(this.value));
+        })
     });
 })(this.jQuery)
