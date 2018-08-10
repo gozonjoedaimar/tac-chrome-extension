@@ -212,7 +212,7 @@ $.ajax(settings).done(function (data) {
     console.log('Unit links found:', units.length);
     if (!units.length) {
         if (dom.find('#j1-tab').length) {
-            // tacStat.refreshStat(level);
+            tacStat.refreshStat(level, fromExtension);
         }
         else {
             console.log('No units found.', `Please check if you're on the correct page.`);

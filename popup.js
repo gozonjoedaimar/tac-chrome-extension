@@ -14,6 +14,15 @@
         currentTab.query({'active': true}, function (tabs) {
             var url = tabs[0].url;
 
+            if (!url.includes('alchemistcodedb.com/units')) {
+                mainBody.innerHTML = "";
+                var warning = document.createElement('small');
+                warning.classList.add(..."rounded col p-3 mr-3 ml-3 mb-0 text-dark bg-warning".split(' '));
+                $(warning).html('Invalid url. Please visit <a target="_blank" href="http://www.alchemistcodedb.com/units">http://www.alchemistcodedb.com/units</a>');
+                mainBody.appendChild(warning);
+                return;
+            }
+
             tacCompareSummary(base, url, function(ajaxdata) {
                 var pre = document.createElement('pre');
                 pre.appendChild(document.createTextNode(JSON.stringify(ajaxdata, null, 2)));
@@ -92,6 +101,12 @@
                             title: "jewels",
                             data: "jewels"
                         },
+                    ],
+                    columnDefs: [
+                        {
+                            target: "_all",
+                            defaultContent: "&nbsp;"
+                        }
                     ]
                 });
                 
