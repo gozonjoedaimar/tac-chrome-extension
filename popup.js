@@ -22,7 +22,17 @@
                 var unitTableCont = document.createElement('div');
                 var unitTableContClasses = "col-12 mb-2";
                 unitTableCont.classList.add(...unitTableContClasses.split(' '));
-                var tableHead = $(`<h5>${ajaxdata.unitName} Stats (${ajaxdata.rank}) (${ajaxdata.elem})</h5>`);
+                var tableHead = $(`<h5>${ajaxdata.unitName} <br/>(${ajaxdata.rank}) (${ajaxdata.elem})</h5>`);
+
+                if (ajaxdata.icon) {
+                    var unitIcon = document.createElement('img');
+                    unitIcon.src = ajaxdata.icon;
+                    unitIcon.classList.add(..."img-thumbnail float-left mr-2 mb-2 bg-secondary border-warning".split(' '));
+                    unitIcon.width = 60;
+                    unitTableCont.appendChild(unitIcon);
+                }
+
+                console.log(ajaxdata);
 
                 unitTableCont.appendChild(tableHead.get(0));
                 unitTableCont.appendChild(unitTable);

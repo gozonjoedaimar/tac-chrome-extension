@@ -30,12 +30,17 @@ class TACStat {
         }
     }
     ajax(url, baseType, fromExtension) {
+        var that = this;
+        let icon = that.icon;
+        delete(that.icon);
+
         console.log('Fetching url:', url);
         getUnitInfo(url).then(function(data) {
             data = data.replace('<body', '<body><div id="body"').replace('</body>', '</div></body>');
             var dom = $(data).filter('#body');
             var type = baseType || 60;
-            var tacStat = new TACStat(type, dom, null, fromExtension);            
+            dom.data('icon', icon);
+            var tacStat = new TACStat(type, dom, null, fromExtension);
         });
     }
     statInfo() {
@@ -55,7 +60,7 @@ class TACStat {
         ];
         if (that.body.find('#j4-tab').length) data.push(this.j4Stat);
         if (fromExtension && typeof fromExtension == 'function') {
-            fromExtension({unitName, rank, elem, data});
+            fromExtension({unitName, rank, elem, data, icon: that.body.data('icon')});
         }
         console.table(data, ['info', ...this.statInfo()]);
     }
@@ -218,6 +223,7 @@ $.ajax(settings).done(function (data) {
         var http = unitsUrl.split('/').splice(0,1);
         var basePath = unitsUrl.split('/').splice(2,1);
         link = http + '//' + basePath + ahref;
+        tacStat.icon = $(el).find('.icon img:nth-child(1)').get(0).src;
         tacStat.ajax(link, level, fromExtension);
     });
 
