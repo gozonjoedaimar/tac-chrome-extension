@@ -17,8 +17,8 @@
             if (!url.includes('alchemistcodedb.com/units')) {
                 mainBody.innerHTML = "";
                 var warning = document.createElement('small');
-                warning.classList.add(..."rounded col p-3 mr-3 ml-3 mb-0 text-dark bg-warning".split(' '));
-                $(warning).html('Invalid url. Please visit <a target="_blank" href="http://www.alchemistcodedb.com/units">http://www.alchemistcodedb.com/units</a>');
+                warning.classList.add(..."rounded col p-3 mr-3 ml-3 mb-0 text-white bg-danger".split(' '));
+                $(warning).html('Invalid url. Please visit <a target="_blank" class="text-white" href="http://www.alchemistcodedb.com/units"><u>http://www.alchemistcodedb.com/units</u></a>');
                 mainBody.appendChild(warning);
                 return;
             }
