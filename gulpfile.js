@@ -1,10 +1,11 @@
 var gulp = require('gulp');
 
 var clean = require('gulp-clean');
-var jshint = require('gulp-jshint');
-var concat = require('gulp-concat');
-var uglify = require('gulp-uglify');
-var imagemin = require('gulp-imagemin');
+// var jshint = require('gulp-jshint');
+// var concat = require('gulp-concat');
+// var uglify = require('gulp-uglify');
+var minify = require('gulp-minify');
+// var imagemin = require('gulp-imagemin');
 
 var bases = {
  app: 'app/',
@@ -14,43 +15,45 @@ var bases = {
 };
 
 var paths = {
- scripts: ['scripts/**/*.js', '!scripts/libs/**/*.js'],
- libs: [
- 	// 'scripts/libs/jquery/dist/jquery.js',
- 	// 'scripts/libs/underscore/underscore.js',
- 	// 'scripts/backbone/backbone.js'
- 	bases.node_modules + 'bootstrap/**/*',
- 	bases.node_modules + 'datatables.net/**/*',
- 	bases.node_modules + 'datatables.net-bs4/**/*',
-	],
- styles: ['styles/**/*.css'],
- html: ['index.html', '404.html'],
- images: ['images/**/*.png'],
- extras: ['crossdomain.xml', 'humans.txt', 'manifest.appcache', 'robots.txt', 'favicon.ico'],
+ scripts: [
+ 	'tac-stat-ob.js'
+ 	],
+ // libs: [
+ // 	// 'scripts/libs/jquery/dist/jquery.js',
+ // 	// 'scripts/libs/underscore/underscore.js',
+ // 	// 'scripts/backbone/backbone.js'
+ // 	bases.node_modules + 'bootstrap/**/*',
+ // 	bases.node_modules + 'datatables.net/**/*',
+ // 	bases.node_modules + 'datatables.net-bs4/**/*',
+	// ],
+ // styles: ['styles/**/*.css'],
+ // html: ['index.html', '404.html'],
+ // images: ['images/**/*.png'],
+ // extras: ['crossdomain.xml', 'humans.txt', 'manifest.appcache', 'robots.txt', 'favicon.ico'],
 };
 
 // Delete the dist directory
 gulp.task('clean', function() {
- return gulp.src(bases.vendor)
+ return gulp.src([bases.vendor, bases.dist])
  .pipe(clean());
 });
 
 // Process scripts and concatenate them into one output file
-gulp.task('scripts', ['clean'], function() {
- gulp.src(paths.scripts, {cwd: bases.app})
- .pipe(jshint())
- .pipe(jshint.reporter('default'))
- .pipe(uglify())
- .pipe(concat('app.min.js'))
- .pipe(gulp.dest(bases.dist + 'scripts/'));
-});
+// gulp.task('scripts', ['clean'], function() {
+//  gulp.src(paths.scripts, {cwd: bases.app})
+//  .pipe(jshint())
+//  .pipe(jshint.reporter('default'))
+//  .pipe(uglify())
+//  .pipe(concat('app.min.js'))
+//  .pipe(gulp.dest(bases.dist + 'scripts/'));
+// });
 
 // Imagemin images and ouput them in dist
-gulp.task('imagemin', ['clean'], function() {
- gulp.src(paths.images, {cwd: bases.app})
- .pipe(imagemin())
- .pipe(gulp.dest(bases.dist + 'images/'));
-});
+// gulp.task('imagemin', ['clean'], function() {
+//  gulp.src(paths.images, {cwd: bases.app})
+//  .pipe(imagemin())
+//  .pipe(gulp.dest(bases.dist + 'images/'));
+// });
 
 // Copy all other files to dist directly
 gulp.task('copy', ['clean'], function() {
@@ -79,10 +82,16 @@ gulp.task('copy', ['clean'], function() {
  // .pipe(gulp.dest(bases.dist));
 });
 
+gulp.task('minify', ['clean'], function() {
+	gulp.src(paths.scripts, {cwd: './'})
+		.pipe(minify())
+		.pipe(gulp.dest(bases.dist))
+});
+
 // A development task to run anytime a file changes
 gulp.task('watch', function() {
  gulp.watch('app/**/*', ['scripts', 'copy']);
 });
 
 // Define the default task as a sequence of the above tasks
-gulp.task('default', ['copy']);
+gulp.task('default', ['copy', 'minify']);
