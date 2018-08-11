@@ -257,7 +257,7 @@ else if (!tacStat.baseType.includes(level)) {
         if ($('#j1-tab').length) 
             tacStat.refreshStat(level);
         else
-            console.log('No units found.', `Please check if you're on the correct page.`);
+            console.log('No units found.', `Please check if you're on the correct page or visit http://www.alchemistcodedb.com/units`);
     }
     units.each(function(i, el) {
     	tacStat.ajax(el.href, level);
