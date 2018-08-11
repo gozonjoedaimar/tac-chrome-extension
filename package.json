@@ -1,6 +1,6 @@
 {
-  "name": "tac-quick-stat-view",
-  "version": "0.0.1-a",
+  "name": "tac-quick-stat",
+  "version": "0.0.1",
   "description": "Quickly view/compare your favorite TAC units!",
   "main": "dist/tac-stat-ob.min.js",
   "scripts": {
