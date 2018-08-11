@@ -39,7 +39,11 @@ gulp.task('copy', ['clean'], function() {
 
 gulp.task('minify', ['clean'], function() {
 	gulp.src(paths.scripts)
-		.pipe(minify())
+		.pipe(minify({
+			ext: {
+				min: ".min.js"
+			}
+		}))
 		.pipe(gulp.dest(bases.dist))
 });
 
