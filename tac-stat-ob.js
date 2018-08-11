@@ -215,7 +215,7 @@ $.ajax(settings).done(function (data) {
             tacStat.refreshStat(level, fromExtension);
         }
         else {
-            console.log('No units found.', `Please check if you're on the correct page.`);
+            console.log('No units found.', `Please check if you're on the correct page or visit http://www.alchemistcodedb.com/units`);
         }
     }
     units.each(function(i, el) {
